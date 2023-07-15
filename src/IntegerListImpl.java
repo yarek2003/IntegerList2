@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 public class IntegerListImpl implements IntegerList {
-    private final Integer[] arrayStorage;
+    private Integer[] arrayStorage;
     private int arraySize;
 
 
@@ -195,6 +195,53 @@ public class IntegerListImpl implements IntegerList {
         }
     }
 
+    private void sort(Integer[] arr) {
+        quickSort(arr, 0, arr.length - 1);
+    }
+
+
+    private boolean binarySearch(Integer[] arr, Integer item) {
+        int min = 0;
+        int max = arr.length - 1;
+        while (min <= max) {
+            int mid = (min + max) / 2;
+            if (item.equals(arr[mid])) {
+                return true;
+            }
+            if (item < arr[mid]) {
+                max = mid - 1;
+            } else {
+                min = mid + 1;
+            }
+        }
+        return false;
+    }
+
+    private void grow() {
+        arrayStorage = Arrays.copyOf(arrayStorage, arraySize + arraySize / 2);
+    }
+
+
+    private void quickSort(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+            quickSort(arr, begin, partitionIndex -1);
+            quickSort(arr, partitionIndex + 1, end);
+        }
+    }
+
+    private int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                swapElements(arr, i, j);
+            }
+        }
+        swapElements(arr, i+1, end);
+        return i + 1;
+    }
     private static void swapElements(Integer[] arr, int indexA, int indexB) {
         int tmp = arr[indexA];
         arr[indexA] = arr[indexB];
